@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html> 
+<head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+  <title>Google Maps Multiple Markers</title> 
+  <script src="http://maps.google.com/maps/api/js?sensor=true&language=vn&libraries=places"           type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    var locations = [
+      ['<h3 style="color:#0099ff"><strong>Danh sách các đại lý ở TP HCM </strong></h3>', 10.96667, 106.66667, 2],
+      ['<h3 style="color:#0099ff"><strong>Danh sách các đại lý ở Hà Nội </strong></h3>', 21.08333, 105.91667, 1],
+      ['<h3 style="color:#0099ff"><strong>Danh sách các đại lý ở Cần Thơ </strong></h3>', 10.03333, 105.76667, 3]
+    ];
+	/*
+		var map = new google.maps.Map(document.getElementById('map'), {
+		  zoom: 16,
+		  center: new google.maps.LatLng(10.96667, 106.66667),
+		  mapTypeId: google.maps.MapTypeId.ROADMAP
+		});
+	*/
+	var map=init_map(10.96667,106.66667);
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+	var blueIcon = "vn.jpg";
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map,
+		icon:blueIcon 
+     });
+	
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+         // infowindow.setContent(locations[i][0]);
+         // infowindow.open(map, marker);
+		 $("#info").html(locations[i][0]);
+		 
+        }
+      })(marker, i));
+    }
+	var marker2 = new google.maps.Marker({position: new google.maps.LatLng(10.96667, 106.66667), map: map,draggable: true});
+	google.maps.event.addListener(marker2, 'dragstart', function() {
+	});
+	google.maps.event.addListener(marker2, 'drag', function() {
+		updateMarkerPosition(marker2.getPosition())
+	  });
+	google.maps.event.addListener(marker2, 'dragend', function() {
+		updateMarkerPosition(marker2.getPosition());
+	  });
+	google.maps.event.addListener(map, 'zoom_changed', function() {
+   // setTimeout(moveToDarwin, 3000);
+  	});
+	var defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(10.96667, 106.66667),
+	  new google.maps.LatLng(21.08333, 105.91667));
+
+	var input = document.getElementById('geo_address');
+	var options = {
+	  //bounds: defaultBounds,
+	 // types: ['establishment']
+	};
+	var autocomplete = new google.maps.places.Autocomplete(input, options);
+	google.maps.event.addListener(autocomplete, 'place_changed', function() {
+	  var place = autocomplete.getPlace();
+	  if (place.geometry.viewport) {
+		map.fitBounds(place.geometry.viewport);
+	  } else {
+		map.setCenter(place.geometry.location);
+		map.setZoom(16);
+	  }
+	  marker2.setPosition(place.geometry.location);
+	  updateMarkerPosition(place.geometry.location);
+	  //infowindow.setContent(place.name);
+	  //infowindow.open(map, marker);
+	});
+	autocomplete.bindTo('bounds',map)
+		//$("#info").html()
+	});
+	function updateMarkerPosition(latLng) {
+  		$('#current_lat').html(latLng.lat());
+		$('#current_long').html(latLng.lng());
+		geocodePosition(latLng);
+		
+		
+	}
+	var geocoder = new google.maps.Geocoder();
+
+	function geocodePosition(pos) {
+	  geocoder.geocode({
+		latLng: pos
+	  }, function(responses) {
+		if (responses && responses.length > 0) {
+		  updateMarkerAddress(responses[0].formatted_address);
+		} else {
+		  updateMarkerAddress('Chưa xác định được vị trí từ điểm này.');
+		}
+	  });
+	}
+	function updateMarkerAddress(str) {
+  		$("#address").html(str);
+	}
+	function init_map(lat,lng){
+		var map = new google.maps.Map(document.getElementById('map'), {
+      	zoom: 16,
+      	center: new google.maps.LatLng(lat, lng),
+      	mapTypeId: google.maps.MapTypeId.ROADMAP
+    	});
+		return map;
+	}
+
+
+  </script>
+  
+</head> 
+<body>
+
+  <div id="map" style="width: 100%; height: 450px;"></div>
+  <div id="info" style="width: 300px; height: 200px;position:absolute;left:0px;top480px">
+		<div id="address"></div>
+        <div id="current_lat"></div><br/>
+        <div id="current_long"></div>
+        Nhập địa chỉ :<input type="text" value="" id="geo_address" style="width:450px;"/>
+        
+  </div>
+  
+</body>
+</html

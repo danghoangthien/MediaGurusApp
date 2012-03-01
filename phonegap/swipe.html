@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+
+<script type="text/javascript" src="../js/swipe/swipe.min.js">
+</script> 
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script >
+	$.fn.ready(function(){
+		alert("a")
+		var slider=new Swipe(document.getElementById('slider'));
+		$("#prev").click(function(){
+			slider.prev();return false;
+		})
+		$("#next").click(function(){
+			slider.next();return false;
+		})
+		setTimeout(function(){
+			$("#slider ul").append("<li style='display:none'>d</li>")
+		},2500)
+	})
+</script>
+</head>
+
+<body>
+    <div id='slider'>
+      <ul>
+        <li style='display:block'>a</li>
+        <li style='display:none'>b</li>
+        <li style='display:none'>c</li>
+      </ul>
+    </div>
+    <a id="prev" >prev</a> 
+	<a id="next" >next</a>
+
+</body>
+</html>

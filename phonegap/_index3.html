@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html class="ui-mobile">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ATM Finder By Gurus</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../js/facebox/facebox.css" rel="stylesheet" type="text/css" media="screen" />
+    <style>
+	.ui-page {
+		/*
+    	-webkit-backface-visibility: hidden;
+		*/
+	}
+	</style>
+    <script src="http://maps.google.com/maps/api/js?sensor=true&language=vn&libraries=places"           type="text/javascript"></script>
+	<script src="http://code.jquery.com/jquery.min.js">	</script>
+	<script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js">	</script>
+    <script src="../js/jquery.tmpl.js">	</script>
+    <script src="../js/ht_plugin/selectbind.js">	</script>
+    <script src="../js/facebox/facebox.js">	</script>
+	<script src="phonegap-1.4.1.js">	</script>
+</head>
+
+<body>
+<div data-role="page" id="home" data-title="Clinic Center Home">
+        <div data-role="header" data-position="fixed">
+            <h4>ATM Finder By Media Gurus</h4>
+        </div><!-- /header -->
+		<div data-role="content">
+        <form action="#" method="get">
+            <div data-role="fieldcontain">
+                <label for="select-choice-1" class="select">Choose shipping method:</label>
+                <select name="select-choice-1" id="select-choice-1">
+                    <option value="standard">Standard: 7 day</option>
+                    <option value="rush">Rush: 3 days</option>
+                    <option value="express">Express: next day</option>
+                    <option value="overnight">Overnight</option>
+                </select>
+            </div>
+        </form>
+    	</div> 
+ 		<div data-role="footer" class="ui-state-persist" data-position="fixed">
+            <h4>-Develope by Mediagurus-</h4>
+        </div><!-- /footer -->
+</div><!-- /page -->       
+</body>
+</html>

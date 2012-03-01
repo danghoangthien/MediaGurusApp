@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>My Town's Tutor Educentre</title>
+<link rel="stylesheet" href="css/jscrollpane.css">
+<link rel="stylesheet" href="css/tuition.css">
+<link rel="stylesheet" href="js/facebox/facebox.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"></script>
+<script src="js/curvycorners.js"></script>
+<script src="js/jquery.transform.js"></script>
+<script src="js/jquery.url2.js"></script>
+<script src="js/scroll_visible.js"></script>
+<script src="js/cufon-yui.js"></script>
+<script src="js/VAGRounded_BT_400.font.js"></script>
+<script src="js/VAGRounded_Lt_400.font.js"></script>
+<script src="js/Futura_Bk_BT_400.font.js"></script>
+<script src="js/Futura_Hv_BT_400.font.js"></script>
+<script src="js/uploadify/swfobject.js" ></script>
+<script src="js/uploadify/jquery.uploadify.v2.1.4.min.js" ></script>
+<script src="js/jquery.tmpl.js" ></script>
+<script src="js/facebox/facebox.js" ></script>
+
+<script >
+	$.fn.ready(function(){
+		// the element we want to apply the jScrollPane
+		Cufon.replace("#about_us_section_4",{fontFamily: 'VAGRounded BT'});
+		Cufon.replace("#about_centre_section_3",{fontFamily: 'VAGRounded BT'});
+		Cufon.replace("#faq_section",{fontFamily: 'VAGRounded BT'});
+		Cufon.replace("#about_programmes_section_4",{fontFamily: 'VAGRounded BT'});//menu-primary
+		$("a[type=cufon]").each(function(){
+			Cufon.replace($(this),{fontFamily: 'Futura_Bk BT'});
+			$(this).mouseenter(function(){
+				//alert("dfg");
+				Cufon.replace($(this),{fontFamily: 'Futura_Hv BT',color:"#fff"})
+			}
+			)
+			$(this).mouseleave(
+				function(){
+					Cufon.replace($(this),{fontFamily: 'Futura_Bk BT',color:"#000"})
+				})
+		})
+		setTimeout(function(){
+		$("a[href]").each(function(){
+				var href=$(this).attr("href");
+				if(href.indexOf("mailto:")>0)
+				{
+					$(this).attr("href",href.substring(7,(href.length)));
+				}
+		})
+		},2500)
+		
+		if(
+			$.url().attr("file")!="homepage.php" 
+			&& $.url().attr("file")!="index.php" 
+		 	&& $.url().attr("file")!="about-us.php" 
+		 	&& $.url().attr("file")!="about-centre.php" 
+			&& $.url().attr("file")!="programmes.php" 
+			&& $.url().attr("file")!="about-home-tuition.php" 
+			&& $.url().attr("file")!="events.php" 
+		 )
+		{
+			$("body").css("background","url(images/orange_line_50.png) repeat-x");
+		}
+		else
+		{
+			$("body").css("background","url(images/orange_line.png) repeat-x");
+		}
+		if($.url().attr("file")=="about-us.php")
+		{
+			var news_id=1;
+			bind_static_page(news_id);
+		}
+		if($.url().attr("file")=="about-centre.php")
+		{
+			var news_id=2;
+			bind_static_page(news_id);
+		}
+		if($.url().attr("file")=="programmes.php")
+		{
+			var news_id=3;
+			bind_static_page(news_id);
+		}
+		if($.url().attr("file")=="events.php")
+		{
+			var news_id=4;
+			bind_static_page(news_id);
+		}
+		if($.url().attr("file")=="about-home-tuition.php")
+		{
+			var news_id=6;
+			bind_static_page(news_id);
+		}
+		if($.url().attr("file")=="homepage.php" || $.url().attr("file")=="index.php")
+		{
+			bind_home_page(9);
+			bind_home_page(10);
+		}
+		//bind_home_page(news_id)
+	});
+	function bind_static_page(news_id)
+	{
+		$.ajax({
+			data:{news_id:news_id},
+			url:"htinmotion/orm/news/core.php?type=get_news_by_news_id",
+			dataType:"json",
+			type:"POST",
+			success:function(json){
+				bindToFormJson(json)
+			}
+		})
+	}
+	function bind_home_page(news_id)
+	{
+		$.ajax({
+			data:{news_id:news_id},
+			url:"htinmotion/orm/news/core.php?type=get_news_by_news_id",
+			dataType:"json",
+			type:"POST",
+			success:function(json){
+				$("div[news_id='"+news_id+"']").html(json.rows[0].row.news_content)
+			}
+		})
+	}
+	
+	function bindToFormJson(json){// rows 0 row
+			$.each(json.rows, function() {
+			  $.each(this, function(key, row) {
+				  $.each(row, function(k, v) {
+					if($("#"+k+"_display").length>0)
+					{
+						$("#"+k+"_display").attr("src",$("#"+k+"_display").attr("folder")+v);
+					} 
+				  	if($("#"+k).is("input[type='text']")|| $("#"+k).is("textarea") ||  $("#"+k).is("input[type='hidden']") )  
+				 	{
+							$( "#"+k ).val(v);
+							
+					}
+				 	if( $("#"+k).is("select") ) 
+					{
+						$( "#"+k ).val(v); //alert(k+" : "+v);
+						$( "#"+k+" option[value='"+v+"']" ).attr("selected","selected");
+					}
+				    if( $("#"+k).is("span")||$("#"+k).is("div")||$("#"+k).is("strong"))
+					{
+						$( "#"+k ).html(v);
+					}	
+				  });
+				/// do stuff
+			  });
+			});
+					
+		}
+	function uploadBinding(elementID,folder) {
+       //jQuery.facebox("u"); 			
+            $("#"+elementID).uploadify(
+                {
+                'uploader'    : 'js/uploadify/uploadify.swf',
+		        'script'      : 'js/uploadify/uploadify.php',
+		        'cancelImg'   : 'js/uploadify/cancel.png',
+		        'buttonImg'   : 'js/uploadify/uploads.png',
+		        'wmode'       : 'transparent',
+		        'folder'      : folder,
+		        'width'       : 28,
+		        'height'	  : 22,
+		        'auto'        : true,
+		        'displayData' : 'speed',
+		        'sizeLimit'   : 10000000,
+		        'fileExt'     : '*.jpg;*.bmp;*.jpeg;*.png;',              
+		        'fileDesc'    : 'File type : JPEG,JPG,PNG,BMP',
+				'onSelect'	  : function(){
+				},	
+				'onComplete'  : function(event, ID, fileObj, response, data) {
+								
+									$("input[name='"+elementID+"']").val(response);
+					
+							
+		                       },
+				'onError': function (a, b, c, d) {
+					
+					if (d.status == 404)
+				
+					jQuery.facebox('Could not find upload script. Use a path relative to: '+'<?= getcwd() ?>');
+					else if (d.type === "HTTP")
+					
+					jQuery.facebox("Error: "+d.type+" Info: "+d.info);
+					else if (d.type ==="File Size")
+					jQuery.facebox(c.name+' '+d.type+' Limit: '+Math.round(d.sizeLimit/1024)+'KB');
+					else
+					jQuery.facebox('error '+d.type+": "+d.text);
+					
+					}  
+					
+                }
+				
+            );       
+    }
+jQuery.fn.serializeObject = function() {
+  var arrayData, objectData;
+  arrayData = this.serializeArray();
+  objectData = {};
+
+  $.each(arrayData, function() {
+    var value;
+
+    if (this.value != null) {
+      value = this.value;
+    } else {
+      value = '';
+    }
+
+    if (objectData[this.name] != null) {
+      if (!objectData[this.name].push) {
+        objectData[this.name] = [objectData[this.name]];
+      }
+
+      objectData[this.name].push(value);
+    } else {
+      objectData[this.name] = value;
+    }
+  });
+
+  return objectData;
+};
+
+</script>	
+</head>
